@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <%
+    var title = page.title;
+    if (is_archive()) {
+        title = __('archive_a');
+        if (is_month()) {
+            title += ' - ' + page.year + '/' + page.month;
+        } else if (is_year()) {
+            title += ' - ' + page.year;
+        }
+    } else if (is_category()) {
+        title = page.category  + ' - ' + config.title;
+    } else if (is_tag()) {
+        title = page.tag + ' - ' + config.title;
+    }
+    if(!title) {
+        title = config.title;
+    }
+    %>
+    <title>
+        <%= title %>
+    </title>
+    <%- favicon_tag('images/jay4497.ico') %>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
+    <%- css('css/chaos.css') %>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@jay44971">
+    <meta name="twitter:title" content="<%= title %>">
+    <meta name="twitter:description" content="jay4497's blog">
+    <meta name="twitter:image" content="">
+</head>
+
+<body>
+<div id="app">
+    <div class="container-fluid">
+        <div class="chaos-menu-dropdown" id="slide-menu">
+            <a class="chaos-logo" href="<%= config.root %>" id="chaos-dropdown-logo">
+                <img src="<%- url_for('images/logo.jpg') %>">
+            </a>
+            <ul>
+                <li>
+                    <a href="<%= config.root %>">首 页</a>
+                </li>
+                <li>
+                    <a href="<%- url_for('categories/madao') %>">废的文</a>
+                </li>
+                <li>
+                    <a href="<%- url_for('categories/nise') %>">伪的事</a>
+                </li>
+            </ul>
+        </div>
+        <div class="chaos-slide-door">
+            <span onclick="showProfile()">
+                <i class="oi oi-plus" id="chaos-door-toggle"></i>
+            </span>
+        </div>
+        <header height="50px">
+            <div class="row">
+                <div class="col-md-4 col-sm-11 center-block">
+                    <div class="chaos-menubar">
+                        <a class="chaos-logo" href="<%= config.title %>" id="chaos-logo">
+                            <img src="<%- url_for('images/logo.jpg') %>">
+                        </a>
+                        <ul class="chaos-menu">
+                            <li>
+                                <a href="<%= config.root %>">首 页</a>
+                            </li>
+                            <li>
+                                <a href="<%- url_for('categories/madao') %>">废的文</a>
+                            </li>
+                            <li>
+                                <a href="<%- url_for('categories/nise') %>">伪的事</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="chaos-container">
+            <div class="row">
+                <%- body %>
+            </div>
+        </main>
+    </div>
+    <footer>
+        <p>&copy 2018 - <%- date(Date.now(), 'YYYY') %> jay4497</p>
+        <p>
+            <a href="https://beian.miit.gov.cn" target="_blank" style="color:#fff;">豫ICP备15033098号</a>
+            /
+            <img src="<%- url_for('images/moe_icp.png') %>"> <a href="https://icp.gov.moe" class="moe-icp" target="_blank">萌备</a><a class="moe-icp" href="https://icp.gov.moe/?keyword=20204497" target="_blank">20204497号</a>
+        </p>
+        <p>
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
+                <img src="<%- url_for('images/cc_copy.png') %>" class="cc-copy">
+            </a>
+        </p>
+    </footer>
+    <div class="chaos-selected-image">
+        <img src="<%- url_for('images/34512986_p0.jpg') %>">
+    </div>
+</div>
+
+<style>
+    .el-button:hover, .el-button:focus, .el-button:active{
+        border-color: #DCDFE6;
+        color: #999;
+        background-color: #fff;
+    }
+    a.moe-icp,
+    a.moe-icp:hover,
+    a.moe-icp:focus {
+        color: #f08080;
+    }
+</style>
+
+<link href="<%- url_for('css/share.min.css') %>" rel="stylesheet">
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="<%- url_for('js/sharejs/js/jquery.share.min.js') %>"></script>
+<script>
+    function showProfile(){
+        event.preventDefault()
+        event.stopPropagation()
+        let slide_left = document.getElementById('slide-menu').style.left
+        if(slide_left !== 0 && slide_left !== '0px'){
+            document.getElementById('slide-menu').style.left = 0
+            document.getElementById('chaos-door-toggle').style.transform = 'rotate(45deg)'
+            document.getElementById('chaos-logo').style.opacity = '0'
+            document.getElementById('chaos-dropdown-logo').style.opacity = '1'
+        } else {
+            document.getElementById('slide-menu').style.left = '-60%'
+            document.getElementById('chaos-door-toggle').style.transform = 'rotate(0)'
+            document.getElementById('chaos-dropdown-logo').style.opacity = '0'
+            document.getElementById('chaos-logo').style.opacity = '1'
+        }
+    }
+
+    document.addEventListener('click', function(e){
+        // e.stopPropagation();
+        let _con = document.getElementById('slide-menu')
+        if(_con != e.target && !_con.contains(e.target)){
+            let slide_left = document.getElementById('slide-menu').style.left
+            if(slide_left != '' && slide_left != undefined && slide_left != NaN && slide_left != null) {
+                if (slide_left == 0 || slide_left == '0px') {
+                    e.preventDefault()
+                }
+            }
+            document.getElementById('slide-menu').style.left = '-60%'
+            document.getElementById('chaos-door-toggle').style.transform = 'rotate(0)'
+            document.getElementById('chaos-dropdown-logo').style.opacity = '0'
+            document.getElementById('chaos-logo').style.opacity = '1'
+        }
+    })
+
+    $('.chaos-post-content p img').click(function() {
+        window.open($(this).attr('src'))
+    });
+
+    /**
+    const ifm = document.createElement('iframe')
+    ifm.src = 'https://chaos.jay4497.cn/api/ss?host=jay4497.cn'
+    ifm.setAttribute('style', 'display:none')
+    document.body.appendChild(ifm)
+    */
+</script>
+<style>
+    .col-md-4, .col-sm-11{
+        padding-left:0;
+        padding-right:0;
+    }
+    .center-block{
+        margin: 0 auto;
+    }
+    header{
+        padding-left: 0;
+        padding-right: 0;
+        background-color:rgba(255,255,255,0.6);
+        position: fixed;
+        top: 0;
+        left:0;
+        width: 100%;
+        z-index: 3;
+    }
+    main{
+        padding-left: 0;
+        padding-right: 0;
+        margin-bottom: 25px;
+    }
+    footer{
+        padding-top: 8px;
+        padding-bottom: 15px;
+        height: auto !important;
+        text-align: center;
+        color: #fff;
+        font-size: 0.9em;
+        background-color: #60676d;
+    }
+    footer p{
+        line-height: 2em;
+        margin-bottom: 0 !important;
+    }
+    footer img{
+        height: 25px;
+    }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EFKNSE3N53"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EFKNSE3N53');
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<div class="col-md-4 col-sm-11 chaos-post-container-detail">
+    <article class="chaos-post">
+        <div class="chaos-post-header">
+            <h1><%= page.title %></h1>
+            <div class="chaos-post-header-info">
+                <span class="chaos-green">
+                    <i class="oi oi-clock"></i>
+                    <%
+                    var fin_date = date(page.date, 'MM-DD');
+                    var post_year = date(page.date, 'YYYY');
+                    var now_year = date(Date.now(), 'YYYY');
+                    if(post_year != now_year) {
+                        fin_date = date(page.date, 'YYYY-MM-DD');
+                    }
+                    %>
+                    <%= fin_date %>
+                </span>
+                <span class="chaos-green">
+                    <i class="oi oi-tag"></i>
+                    <%- list_categories(page.categories, {
+                        style: false,
+                        show_count: false,
+                        transform(str) {
+                            var all_cats = {
+                                madao: '废的文',
+                                nise: '伪的事'
+                            };
+                            return all_cats[str];
+                        }
+                    }) %>
+                </span>
+            </div>
+        </div>
+
+        <div class="chaos-post-content">
+            <%= page.content %>
+        </div>
+    </article>
+    <div class="chaos-post-toolbar">
+        <span class="chaos-blue" id="chaos-share" style="position: relative;">
+            <i class="oi oi-share-boxed" style="z-index: 5;"></i>
+            <div class="social-share" data-sites="qzone, qq, wechat, weibo, douban, twitter, google"></div>
+        </span>
+    </div>
+    <style>
+        .chaos-post-toolbar{
+            margin:10px auto 15px 15px;
+            line-height: 30px;
+        }
+        .chaos-post-content p img {
+            display: block;
+            width: 100%;
+            cursor: pointer;
+        }
+        .social-share{
+            width: 280px;
+            position: absolute;
+            left: -100px;
+            top: -10px;
+            visibility: hidden;
+            opacity: 0;
+            transition: left .2s, opacity .2s, visibility .2s;
+        }
+        #chaos-share:hover .social-share{
+            visibility: visible;
+            left: 18px;
+            opacity: 1;
+        }
+    </style>
+</div>

@@ -1,0 +1,97 @@
+<%
+var subLength = 150;
+if (theme.auto_excerpt) {
+    if (theme.auto_excerpt.enable == true && theme.auto_excerpt.length > 0) {
+        subLength = theme.auto_excerpt.length;
+    }
+}
+var pageNum = 10;
+if (config.index_generator.per_page) {
+    pageNum = config.index_generator.per_page;
+}
+var order = date;
+if (config.index_generator.order_by) {
+    order = config.index_generator.order_by;
+}
+%>
+
+<div class="col-md-4 col-sm-11 chaos-post-container">
+    <% if (page.posts.length > 0) { %>
+    <% page.posts.sort('order', -1).limit(pageNum).each(function(post) { %>
+    <article class="chaos-post">
+        <div class="chaos-post-header">
+            <h3>
+                <a href="<%- url_for(post.path) %>">
+                    <%= post.title %>
+                </a>
+            </h3>
+            <div class="chaos-post-header-info">
+                <span class="chaos-green">
+                    <i class="oi oi-clock"></i>
+                    <%
+                        var fin_date = date(post.date, 'MM-DD');
+                        var post_year = date(post.date, 'YYYY');
+                        var now_year = date(Date.now(), 'YYYY');
+                        if (post_year != now_year) {
+                            fin_date = date(post.date, 'YYYY-MM-DD');
+                        }
+                    %>
+                    <%= fin_date %>
+                </span>
+                <span class="chaos-green">
+                    <i class="oi oi-tag"></i>
+                    <%- list_categories(post.categories, {
+                        style: false,
+                        show_count: false,
+                        transform(str) {
+                            var all_cats = {
+                                madao: '废的文',
+                                nise: '伪的事'
+                            };
+                            return all_cats[str];
+                        }
+                    }) %>
+                </span>
+            </div>
+        </div>
+        <div class="chaos-post-description">
+            <% if (post.cover) { %>
+            <div class="chaos-post-cover" style="background: url(<%= post.cover %>) no-repeat;">
+                <span class="chaos-post-cover-water"></span>
+            </div>
+            <% }%>
+            <div class="article-item-content">
+                <% if (post.content) {
+                        var text = strip_html(post.content).substr(0, subLength) + '...';
+                    }
+                %>
+                <p><%= text %></p>
+            </div>
+        </div>
+        <div class="chaos-post-footer">
+            <a href="<%- url_for(post.path) %>">
+                阅读全文
+            </a>
+        </div>
+    </article>
+    <% }); %>
+
+    <div class="chaos-load-more">
+        <% if (page.prev && page.prev > 1) { %>
+        <a class="chaos-page-pre" href="<%- url_for('page/' + page.prev) %>">
+            <i class="oi oi-chevron-left"></i> 上一页
+        </a>
+        <% }%>
+        <% if (page.prev == 1) {%>
+        <a class="chaos-page-pre" href="<%= config.root %>">
+            <i class="oi oi-chevron-left"></i> 上一页
+        </a>
+        <% }%>
+        <% if (page.next) { %>
+        <a class="chaos-page-next" href="<%- url_for('page/' + page.next) %>">
+            下一页 <i class="oi oi-chevron-right"></i>
+        </a>
+        <% }%>
+    </div>
+    <% }%>
+</div>
