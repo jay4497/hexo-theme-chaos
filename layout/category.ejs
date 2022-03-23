@@ -1,14 +1,7 @@
-<%
-var order = date;
-if (config.index_generator.order_by) {
-    order = config.index_generator.order_by;
-}
-%>
-
 <div class="col-md-4 col-sm-11 chaos-post-container" style="padding-top: 25px;padding-bottom: 25px; margin-top: 0;">
     <% if (page.posts.length > 0) { %>
     <% var step_year = date(Date.now(), 'YYYY'); %>
-    <% page.posts.sort('order', -1).each(function(post) { %>
+    <% page.posts.each(function(post) { %>
     <article class="chaos-post-archive">
     <%
         var post_year = date(post.date, 'YYYY');
@@ -23,7 +16,7 @@ if (config.index_generator.order_by) {
     %>
         <a class="chaos-post-archive-title chaos-archive-line" title="<%= post.title %>" href="<%- url_for(post.path) %>">
             <span class="chaos-post-archive-date"><%- date(post.date, 'MM-DD') %></span>
-            <%- truncate(post.title, 26) %>
+            <%- truncate(post.title, 22) %>
         </a>
 
     </article>

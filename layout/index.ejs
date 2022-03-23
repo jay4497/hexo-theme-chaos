@@ -1,23 +1,6 @@
-<%
-var subLength = 150;
-if (theme.auto_excerpt) {
-    if (theme.auto_excerpt.enable == true && theme.auto_excerpt.length > 0) {
-        subLength = theme.auto_excerpt.length;
-    }
-}
-var pageNum = 10;
-if (config.index_generator.per_page) {
-    pageNum = config.index_generator.per_page;
-}
-var order = date;
-if (config.index_generator.order_by) {
-    order = config.index_generator.order_by;
-}
-%>
-
 <div class="col-md-4 col-sm-11 chaos-post-container">
     <% if (page.posts.length > 0) { %>
-    <% page.posts.sort('order', -1).limit(pageNum).each(function(post) { %>
+    <% page.posts.each(function(post) { %>
     <article class="chaos-post">
         <div class="chaos-post-header">
             <h3>
@@ -62,7 +45,7 @@ if (config.index_generator.order_by) {
             <% }%>
             <div class="article-item-content">
                 <% if (post.content) {
-                        var text = strip_html(post.content).substr(0, subLength) + '...';
+                        var text = strip_html(post.content).substr(0, 150) + '...';
                     }
                 %>
                 <p><%= text %></p>
@@ -78,7 +61,7 @@ if (config.index_generator.order_by) {
 
     <div class="chaos-load-more">
         <% if (page.prev && page.prev > 1) { %>
-        <a class="chaos-page-pre" href="<%- url_for('page/' + page.prev) %>">
+        <a class="chaos-page-pre" href="<%- url_for(config.pagination_dir + '/' + page.prev) %>">
             <i class="oi oi-chevron-left"></i> 上一页
         </a>
         <% }%>
@@ -88,7 +71,7 @@ if (config.index_generator.order_by) {
         </a>
         <% }%>
         <% if (page.next) { %>
-        <a class="chaos-page-next" href="<%- url_for('page/' + page.next) %>">
+        <a class="chaos-page-next" href="<%- url_for(config.pagination_dir + '/' + page.next) %>">
             下一页 <i class="oi oi-chevron-right"></i>
         </a>
         <% }%>
