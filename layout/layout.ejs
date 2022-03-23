@@ -4,18 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
     <%
-    var title = page.title;
-    if (is_archive()) {
-        title = __('archive_a');
-        if (is_month()) {
-            title += ' - ' + page.year + '/' + page.month;
-        } else if (is_year()) {
-            title += ' - ' + page.year;
-        }
-    } else if (is_category()) {
-        title = page.category  + ' - ' + config.title;
-    } else if (is_tag()) {
-        title = page.tag + ' - ' + config.title;
+    var title = page.title + ' - ' + config.title;
+    var all_cates = {
+        madao: '废的文',
+        nise: '伪的事'
+    };
+    if (is_category()) {
+        title = all_cates[page.category]  + ' - ' + config.title;
     }
     if(!title) {
         title = config.title;
@@ -32,7 +27,11 @@
     <meta name="twitter:site" content="@jay44971">
     <meta name="twitter:title" content="<%= title %>">
     <meta name="twitter:description" content="jay4497's blog">
-    <meta name="twitter:image" content="">
+    <% if (is_post() && page.cover) { %>
+    <meta name="twitter:image" content="<%- full_url_for(page.cover) %>">
+    <% } else { %>
+    <meta name="twitter:image" content="<%- full_url_for('images/34512986_p0.jpg') %>">
+    <% }%>
 </head>
 
 <body>
@@ -63,7 +62,7 @@
             <div class="row">
                 <div class="col-md-4 col-sm-11 center-block">
                     <div class="chaos-menubar">
-                        <a class="chaos-logo" href="<%= config.title %>" id="chaos-logo">
+                        <a class="chaos-logo" href="<%= config.root %>" id="chaos-logo">
                             <img src="<%- url_for('images/logo.jpg') %>">
                         </a>
                         <ul class="chaos-menu">
@@ -90,8 +89,6 @@
     <footer>
         <p>&copy 2018 - <%- date(Date.now(), 'YYYY') %> jay4497</p>
         <p>
-            <a href="https://beian.miit.gov.cn" target="_blank" style="color:#fff;">豫ICP备15033098号</a>
-            /
             <img src="<%- url_for('images/moe_icp.png') %>"> <a href="https://icp.gov.moe" class="moe-icp" target="_blank">萌备</a><a class="moe-icp" href="https://icp.gov.moe/?keyword=20204497" target="_blank">20204497号</a>
         </p>
         <p>
@@ -120,7 +117,7 @@
 
 <link href="<%- url_for('css/share.min.css') %>" rel="stylesheet">
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-<script src="<%- url_for('js/sharejs/js/jquery.share.min.js') %>"></script>
+<script src="<%- url_for('js/jquery.share.min.js') %>"></script>
 <script>
     function showProfile(){
         event.preventDefault()
